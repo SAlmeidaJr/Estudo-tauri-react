@@ -4,10 +4,15 @@ import { Button } from "./ui/button";
 import { Pin } from "lucide-react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Input } from "./ui/input";
+import { ScrollArea } from "./ui/scroll-area";
+import NotesCard from "./NotesCard";
+import EmptyNote from "./EmptyNote";
 
 export default function AddNote(): JSX.Element {
+  const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
-  const [notes, setNotes] = useState<string[]>([]);
+  const [notes, setNotes] = useState<[string, string][]>([]);
 
   return (
     <div>
@@ -17,8 +22,13 @@ export default function AddNote(): JSX.Element {
           <TabsTrigger value="see-notes">See Notes</TabsTrigger>
         </TabsList>
         <TabsContent value="add-notes" className="grid w-full gap-2">
+          <Input
+            className="min-w-xl"
+            placeholder="Title"
+            onChange={(e) => setTitle(e.target.value)}
+          />
           <Textarea
-            className="w-150 h-32 resize-none"
+            className="min-w-xl h-32 resize-none"
             placeholder="Make a note"
             onChange={(e) => setNote(e.target.value)}
           />
@@ -27,8 +37,9 @@ export default function AddNote(): JSX.Element {
             variant="outline"
             onClick={() => {
               toast.success("Salvo com sucesso");
-              setNotes([...notes, note]);
+              setNotes([...notes, [title, note]]);
               setNote("");
+              setTitle("");
             }}
           >
             <Pin />
@@ -36,17 +47,23 @@ export default function AddNote(): JSX.Element {
           </Button>
         </TabsContent>
         <TabsContent value="see-notes">
-          <div className="flex flex-col gap-2">
-            <p className="text-sm text-muted-foreground ">
-              {notes.length > 0
-                ? notes.map((note, index) => (
-                    <div key={index}>
-                      {index + 1}: {note}
-                    </div>
-                  ))
-                : "No notes yet"}
+          <ScrollArea className="flex flex-col ">
+            <p className="text-sm text-muted-foreground">
+              {notes.length > 0 ? (
+                notes.map(([title, note], idx) => (
+                  <div key={idx} className="p-1">
+                    <NotesCard
+                      title={title}
+                      content={note}
+                      timeStamp={new Date()}
+                    />
+                  </div>
+                ))
+              ) : (
+                <EmptyNote />
+              )}
             </p>
-          </div>
+          </ScrollArea>
         </TabsContent>
       </Tabs>
     </div>

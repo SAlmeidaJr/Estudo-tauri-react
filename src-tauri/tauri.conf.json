@@ -12,9 +12,12 @@
   "app": {
     "windows": [
       {
+        "resizable": false,
+        "center": true,
+        "fullscreen": false,
         "title": "med-top",
-        "width": 800,
-        "height": 600
+        "width": 1000,
+        "height": 800
       }
     ],
     "security": {

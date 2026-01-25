@@ -6,7 +6,7 @@ import { SidebarProvider } from "@/providers/SidebarProvider";
 export default function AppLayout() {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen ">
         <AppSidebar />
 
         <main className="flex-1 p-4">
